@@ -10,3 +10,9 @@
     margin: 0 auto;
     padding: 10px;
 }
+
+.app-wrapper-content {
+    background-color: darkkhaki;
+    grid-area: c;
+    margin: 10px;
+}
