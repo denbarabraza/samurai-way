@@ -1,9 +1,16 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import {Post} from "./Posts/Post";
+import {PostsType} from "../../../redux/state";
 
+type MyPostsPropsType={
+    state: Array<PostsType>
+}
 
-export const MyPosts = () => {
+export const MyPosts = (props:MyPostsPropsType) => {
+
+    let postsElements=props.state.map(p=><Post message={p.message} likesCount={p.likesCount}/>)
+
     return (
         <div className={s.postsBlock}>
             <h3>My post</h3>
@@ -17,8 +24,7 @@ export const MyPosts = () => {
 
             </div>
             <div className={s.posts}>
-                <Post message={'Hi, how are you?'} likesCount={13}/>
-                <Post message={'It\'s my first post'} likesCount={22}/>
+                {postsElements}
             </div>
         </div>
     )
