@@ -1,3 +1,5 @@
+import {renderTree} from "../renderTree";
+
 export type PostsType = {
     id: number
     message: string
@@ -18,10 +20,10 @@ export type DialogsPageType = {
     messages: Array<MessagesType>
     dialogs: Array<DialogsType>
 }
-export type SidebarType={
+export type SidebarType = {
     friends: Array<FriendsType>
 }
-export type FriendsType={
+export type FriendsType = {
     id: number
     name: string
 }
@@ -32,7 +34,7 @@ export type RootStateType = {
     sidebar: SidebarType
 }
 
-let state:RootStateType = {
+let state: RootStateType = {
     profilePage: {
         posts: [
             {id: 1, message: 'Hi, how are you?', likesCount: 13},
@@ -58,7 +60,7 @@ let state:RootStateType = {
         ]
     },
     sidebar: {
-        friends:[
+        friends: [
             {id: 1, name: 'Dimych'},
             {id: 2, name: 'Andrew'},
             {id: 3, name: 'Sveta'},
@@ -67,6 +69,16 @@ let state:RootStateType = {
             {id: 6, name: 'Valera'},
         ]
     }
+}
+
+export const addPost = (postText: string) => {
+    let newPost: PostsType = {
+        id: new Date().getTime(),
+        message: postText,
+        likesCount: 0
+    }
+    state.profilePage.posts.push(newPost)
+    renderTree(state)
 }
 
 export default state;
