@@ -9,12 +9,17 @@ import {RootStateType} from "./redux/state";
 
 type AppPropsType={
     state:RootStateType
-    addPost:(postText: string)=>void
+    addPost:()=>void
+    updateNewPostText:(newPostText: string)=>void
 }
 
 const App = (props: AppPropsType) => {
 
-    const ProfileHandler=() =><Profile state={props.state.profilePage} addPost={props.addPost}/>
+    const ProfileHandler=() =><Profile
+        state={props.state.profilePage}
+        addPost={props.addPost}
+        updateNewPostText={props.updateNewPostText}
+    />
     const DialogsHandler=() =><Dialogs state={props.state.dialogsPage}/>
 
     return (
