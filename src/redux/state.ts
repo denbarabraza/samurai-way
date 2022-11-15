@@ -1,3 +1,7 @@
+import {dialogsReducer, DialogsReducerType} from "./dialogsReducer";
+import {profileReducer, ProfileReducerType} from "./profileReducer";
+import {sidebarReducer} from "./sidebarReducer";
+
 export type PostsType = {
     id: number
     message: string
@@ -32,11 +36,7 @@ export type RootStateType = {
     dialogsPage: DialogsPageType
     sidebar: SidebarType
 }
-export type ActionsTypes =
-    ReturnType<typeof addPostAC> |
-    ReturnType<typeof updateNewPostTextAC> |
-    ReturnType<typeof addMessageAC> |
-    ReturnType<typeof updateNewMessageTextAC>
+export type ActionsTypes = ProfileReducerType | DialogsReducerType
 
 export type StoreType = {
     _state: RootStateType
@@ -95,7 +95,12 @@ export let store: StoreType = {
         this.callSubscribe = observer
     },
     dispatch(action) {
-        if (action.type === ADD_POST) {
+        this._state.dialogsPage=dialogsReducer(this._state.dialogsPage,action)
+        this._state.profilePage=profileReducer(this._state.profilePage,action)
+        this._state.sidebar=sidebarReducer(this._state.sidebar,action)
+        this.callSubscribe()
+
+       /* if (action.type === ADD_POST) {
             let newPost: PostsType = {
                 id: new Date().getTime(),
                 message: this._state.profilePage.newPostText,
@@ -108,8 +113,8 @@ export let store: StoreType = {
         else if (action.type === UPDATE_NEW_POST_TEXT) {
             this._state.profilePage.newPostText = action.newPostText
             this.callSubscribe()
-        }
-        else if (action.type === ADD_MESSAGE) {
+        }*/
+        /*else if (action.type === ADD_MESSAGE) {
             let newMessage: MessagesType = {
                 id: 1,
                 message: this._state.dialogsPage.newMessageText
@@ -121,38 +126,11 @@ export let store: StoreType = {
         else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
             this._state.dialogsPage.newMessageText = action.newMessageText
             this.callSubscribe()
-        }
+        }*/
     },
 }
 
-export const addPostAC = () => {
-    return {
-        type: ADD_POST
-    } as const
-}
 
-export const updateNewPostTextAC = (newPostText:string) => {
-    return {
-        type: UPDATE_NEW_POST_TEXT,
-        newPostText: newPostText
-    } as const
-}
 
-export const addMessageAC = () => {
 
-    return {
-        type: ADD_MESSAGE
-    } as const
-}
 
-export const updateNewMessageTextAC = (newMessageText:string) => {
-    return {
-        type: UPDATE_NEW_MESSAGE_TEXT,
-        newMessageText: newMessageText
-    } as const
-}
-
-const UPDATE_NEW_POST_TEXT='UPDATE-NEW-POST-TEXT'
-const ADD_POST='ADD-POST'
-const ADD_MESSAGE='ADD_MESSAGE'
-const UPDATE_NEW_MESSAGE_TEXT='UPDATE-NEW-MESSAGE-TEXT'
