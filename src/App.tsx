@@ -5,11 +5,12 @@ import {Navbar} from "./components/Navbar/Navbar";
 import {Profile} from "./components/Profile/Profile";
 import {Dialogs} from "./components/Dialogs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
-import {ActionsTypes, store, StoreType} from "./redux/state";
+import {ActionsTypes, store} from "./redux/store";
+import {AppStoreType} from "./redux/redux-store";
+import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
 
 type AppPropsType = {
-    store: StoreType
-    dispatch:(action:ActionsTypes)=>void
+    store: AppStoreType
 }
 
 const App = (props: AppPropsType) => {
@@ -17,12 +18,10 @@ const App = (props: AppPropsType) => {
     const state = props.store.getState()
 
     const ProfileHandler = () => <Profile
-        state={state.profilePage}
-        dispatch={store.dispatch.bind(store)}
+        store={props.store}
     />
-    const DialogsHandler = () => <Dialogs
-        state={state.dialogsPage}
-        dispatch={store.dispatch.bind(store)}
+    const DialogsHandler = () => <DialogsContainer
+        store={props.store}
     />
 
     return (

@@ -84,7 +84,6 @@ export let store: StoreType = {
             ]
         }
     },
-
     getState() {
         return this._state
     },
@@ -99,34 +98,6 @@ export let store: StoreType = {
         this._state.profilePage=profileReducer(this._state.profilePage,action)
         this._state.sidebar=sidebarReducer(this._state.sidebar,action)
         this.callSubscribe()
-
-       /* if (action.type === ADD_POST) {
-            let newPost: PostsType = {
-                id: new Date().getTime(),
-                message: this._state.profilePage.newPostText,
-                likesCount: 0
-            }
-            this._state.profilePage.posts.push(newPost)
-            this._state.profilePage.newPostText = ''
-            this.callSubscribe()
-        }
-        else if (action.type === UPDATE_NEW_POST_TEXT) {
-            this._state.profilePage.newPostText = action.newPostText
-            this.callSubscribe()
-        }*/
-        /*else if (action.type === ADD_MESSAGE) {
-            let newMessage: MessagesType = {
-                id: 1,
-                message: this._state.dialogsPage.newMessageText
-            }
-            this._state.dialogsPage.messages.push(newMessage)
-            this._state.dialogsPage.newMessageText = ''
-            this.callSubscribe()
-        }
-        else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
-            this._state.dialogsPage.newMessageText = action.newMessageText
-            this.callSubscribe()
-        }*/
     },
 }
 
