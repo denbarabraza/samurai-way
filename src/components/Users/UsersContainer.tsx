@@ -5,24 +5,24 @@ import {Dispatch} from "redux";
 import {followedAC, sendUserAC, unFollowedAC, UsersPageType, UserType} from "../../redux/usersReducer";
 
 export type CommonUsersType =
-    MapStateToType
-    & MapDispatchToType
+    MapStateToPropsType
+    & MapDispatchToPropsType
 
-type MapStateToType = {
-    users: UsersPageType
+type MapStateToPropsType = {
+    usersPage: UsersPageType
 }
-type MapDispatchToType = {
+type MapDispatchToPropsType = {
     followedHandler: (userID: string) => void
     unFollowedHandler: (userID: string) => void
-    sendUsers: (users: UserType[]) => void
+    setUsers: (users: UserType[]) => void
 }
 
-const mapStateToProps = (state: RootReducerType): MapStateToType => {
+const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
     return {
-        users: state.usersPage
+        usersPage: state.usersPage
     }
 }
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToType => {
+const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
     return {
         followedHandler: (userID: string) => {
             dispatch(followedAC(userID))
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToType => {
         unFollowedHandler: (userID: string) => {
             dispatch(unFollowedAC(userID))
         },
-        sendUsers: (users: UserType[]) => {
+        setUsers: (users: UserType[]) => {
             dispatch(sendUserAC(users))
         }
     }
