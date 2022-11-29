@@ -1,51 +1,49 @@
-import {dialogsReducer, DialogsReducerType} from "./dialogsReducer";
-import {profileReducer, ProfileReducerType} from "./profileReducer";
+import {dialogsReducer} from "./dialogsReducer";
 import {sidebarReducer} from "./sidebarReducer";
 
-export type PostsType = {
+ type PostsType = {
     id: number
     message: string
     likesCount: number
 }
-export type MessagesType = {
+type MessagesType = {
     id: number
     message: string
 }
-export type DialogsType = {
+type DialogsType = {
     id: number
     name: string
 }
-export type ProfilePageType = {
+ type ProfilePageType = {
     posts: Array<PostsType>
     newPostText: string
 }
-export type DialogsPageType = {
+type DialogsPageType = {
     messages: Array<MessagesType>
     dialogs: Array<DialogsType>
     newMessageText: string
 }
-export type SidebarType = {
+ type SidebarType = {
     friends: Array<FriendsType>
 }
-export type FriendsType = {
+ type FriendsType = {
     id: number
     name: string
 }
-export type RootStateType = {
+ type RootStateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
     sidebar: SidebarType
 }
-export type ActionsTypes = ProfileReducerType | DialogsReducerType
 
-export type StoreType = {
+ type StoreType = {
     _state: RootStateType
     getState: () => RootStateType
     callSubscribe: () => void
     subscribe: (observer: () => void) => void
-    dispatch: (action: ActionsTypes) => void
+    dispatch: (action: any) => void
 }
-export let store: StoreType = {
+ let store: StoreType = {
     _state: {
         profilePage: {
             posts: [
@@ -95,7 +93,7 @@ export let store: StoreType = {
     },
     dispatch(action) {
         this._state.dialogsPage=dialogsReducer(this._state.dialogsPage,action)
-        this._state.profilePage=profileReducer(this._state.profilePage,action)
+        /*this._state.profilePage=profileReducer(this._state.profilePage,action)*/
         this._state.sidebar=sidebarReducer(this._state.sidebar,action)
         this.callSubscribe()
     },

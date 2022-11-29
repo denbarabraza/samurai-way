@@ -1,27 +1,19 @@
 import React, {ChangeEvent} from 'react';
-import s from './Dialogs.module.css';
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Messages} from "./Messages/Messages";
-import {DialogsType, MessagesType} from "../../redux/store";
+import s from "./Dialogs.module.css";
+import {CommonDialogsType} from "./DialogsContainer";
 
-type DialogsPropsType = {
-    messages: Array<MessagesType>
-    dialogs: Array<DialogsType>
-    newMessageText: string
-    sendMessageHandler:()=>void
-    onChangeMessageHandler:(valueMessage:string)=>void
-}
-
-export const Dialogs = (props: DialogsPropsType) => {
-
-    let dialogsElements = props.dialogs.map(d => <DialogItem key={d.id} name={d.name} id={d.id}/>);
-    let messagesElements = props.messages.map(m => <Messages key={m.id} message={m.message}/>)
-    let messageBody=props.newMessageText
+export const Dialogs = (props: CommonDialogsType) => {
+    //console.log(props.dialogsPage.newMessageText)
+    let dialogsElements = props.dialogsPage.dialogs.map(d => <DialogItem key={d.id} name={d.name} id={d.id}/>);
+    let messagesElements = props.dialogsPage.messages.map(m => <Messages key={m.id} message={m.message}/>)
+    let messageBody = props.dialogsPage.newMessageText
 
     const onSendClickSendMessageHandler = () => {
         props.sendMessageHandler()
     }
-    const onChangeMessageHandler=(e:ChangeEvent<HTMLTextAreaElement> )=>{
+    const onChangeMessageHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
         props.onChangeMessageHandler(e.currentTarget.value)
     }
 

@@ -1,11 +1,12 @@
 import React from 'react';
-/*
+import {connect} from "react-redux";
+import s from "./Navbar.module.css";
+import {NavLink} from "react-router-dom";
+import {RootReducerType} from "../../redux/redux-store";
+import {Friends} from "./Sidebar/Friends";
 
-type NavbarPropsType={
-    state: SidebarType
-}
 
-export const Navbar = (props:NavbarPropsType) => {
+const Navbar = (props: CommonNavbarType) => {
     return (
         <nav className={s.nav}>
             <div className={s.item}>
@@ -13,7 +14,7 @@ export const Navbar = (props:NavbarPropsType) => {
                     Profile
                 </NavLink>
             </div>
-            <div className={s.item} >
+            <div className={s.item}>
                 <NavLink to={"/dialogs"} activeClassName={s.activeLink}>
                     Messages
                 </NavLink>
@@ -34,10 +35,25 @@ export const Navbar = (props:NavbarPropsType) => {
                 </NavLink>
             </div>
             <div className={s.item}>
+                <NavLink to={"/sfriends"} activeClassName={s.activeLink}>
+                    Search Friends
+                </NavLink>
+            </div>
+            <div className={s.item}>
                 <Friends state={props.state}/>
             </div>
         </nav>
     )
 }
-*/
 
+type CommonNavbarType={
+    state: RootReducerType
+}
+
+const mapStateToProps = (state: RootReducerType):CommonNavbarType => {
+    return {
+        state: state
+    } as const
+}
+
+export const NavbarContainer = connect(mapStateToProps)(Navbar)

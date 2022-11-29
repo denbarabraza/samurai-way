@@ -1,16 +1,9 @@
 import React, {ChangeEvent} from 'react';
-import s from './MyPosts.module.css';
 import {Post} from "./Posts/Post";
-import {PostsType} from "../../../redux/store";
+import s from "./MyPosts.module.css";
+import {CommonPostType} from "./MyPostsContainer";
 
-type MyPostsPropsType = {
-    posts: Array<PostsType>
-    onPostAdd:()=>void
-    onPostChangeHandler:(valuePost:string)=>void
-    newPostText: string
-}
-
-export const MyPosts = (props: MyPostsPropsType) => {
+export const MyPosts = (props: CommonPostType) => {
 
     let postsElements = props.posts.map(p => <Post key={p.id} message={p.message} likesCount={p.likesCount}/>)
 
@@ -20,7 +13,6 @@ export const MyPosts = (props: MyPostsPropsType) => {
     const onPostChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
         props.onPostChangeHandler(e.currentTarget.value)
     }
-
 
     return (
         <div className={s.postsBlock}>
@@ -35,8 +27,6 @@ export const MyPosts = (props: MyPostsPropsType) => {
                 <div>
                     <button onClick={addPost}>Add post..</button>
                 </div>
-
-
             </div>
             <div className={s.posts}>
                 {postsElements}

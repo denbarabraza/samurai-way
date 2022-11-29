@@ -1,34 +1,37 @@
 import React from 'react';
-import {ActionsTypes, PostsType} from "../../../redux/store";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/profileReducer";
+import {addPostAC, PostsType, updateNewPostTextAC} from "../../../redux/profileReducer";
+import {connect} from "react-redux";
+import {RootReducerType} from "../../../redux/redux-store";
+import {Dispatch} from "redux";
 import {MyPosts} from "./MyPosts";
-import {AppStoreType} from "../../../redux/redux-store";
 
-type MyPostsPropsType = {
-    store: AppStoreType
-   /* posts: Array<PostsType>
-    dispatch: (action: ActionsTypes) => void
-    newPostText: string*/
+
+export type CommonPostType = MapStateToPropsType & MapDispatchToProps
+type MapStateToPropsType = {
+    posts: Array<PostsType>
+    newPostText: string
+}
+type MapDispatchToProps = {
+    onPostAdd: () => void
+    onPostChangeHandler: (valuePost: string) => void
 }
 
-export const MyPostsContainer = (props: MyPostsPropsType) => {
-
-    let state=props.store.getState()
-
-    const onPostAdd = () => {
-        props.store.dispatch(addPostAC())
+//My post container
+const mapStateToProps = (state: RootReducerType):MapStateToPropsType => {
+    return {
+        posts: state.profilePage.posts,
+        newPostText: state.profilePage.newPostText
     }
-    const onPostChangeHandler = (valuePost:string) => {
-        props.store.dispatch(updateNewPostTextAC(valuePost))
-    }
-
-
-    return (
-        <MyPosts
-            posts={state.profilePage.posts}
-            onPostAdd={onPostAdd}
-            onPostChangeHandler={onPostChangeHandler}
-            newPostText={state.profilePage.newPostText}
-        />
-    )
 }
+const mapDispatchToProps = (dispatch: Dispatch):MapDispatchToProps => {
+    return {
+        onPostAdd: () => {
+            dispatch(addPostAC())
+        },
+        onPostChangeHandler: (valuePost: string) => {
+            dispatch(updateNewPostTextAC(valuePost))
+        }
+    }
+}
+
+export const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)

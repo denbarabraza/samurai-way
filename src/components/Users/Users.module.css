@@ -1,0 +1,37 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.items{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    background-color: #748a8a;
+    border-radius: 20px;
+    color: white;
+}
+
+.userInfo{
+    display: flex;
+    flex-direction: row;
+}
+.itemInfo{
+    width: 850px;
+    padding: 5px;
+
+}
+
+.itemInfoLoc{
+
+}
+
+.item{
+
+}
+
+.item img{
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+}

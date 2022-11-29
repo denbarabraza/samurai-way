@@ -1,35 +1,29 @@
 import React from 'react';
 import './App.css';
 import {Header} from "./components/Header/Header";
-import {Navbar} from "./components/Navbar/Navbar";
 import {Profile} from "./components/Profile/Profile";
-import {Dialogs} from "./components/Dialogs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
-import {ActionsTypes, store} from "./redux/store";
-import {AppStoreType} from "./redux/redux-store";
 import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
+import {NavbarContainer} from "./components/Navbar/NavbarContainer";
+import {UsersContainer} from "./components/Users/UsersContainer";
 
-type AppPropsType = {
+/*type AppPropsType = {
     store: AppStoreType
-}
+}*/
 
-const App = (props: AppPropsType) => {
+const App = (/*props: AppPropsType*/) => {
 
-    const state = props.store.getState()
 
-    const ProfileHandler = () => <Profile
-        store={props.store}
-    />
-    const DialogsHandler = () => <DialogsContainer
-        store={props.store}
-    />
+    const ProfileHandler = () => <Profile  />
+    const DialogsHandler = () => <DialogsContainer />
+    const UsersHandler = () => <UsersContainer />
 
     return (
         <BrowserRouter>
 
             <div className="app-wrapper">
                 <Header/>
-                <Navbar state={state.sidebar}/>
+                <NavbarContainer/>
                 <div className={"app-wrapper-content"}>
 
                     <Route
@@ -39,6 +33,10 @@ const App = (props: AppPropsType) => {
                     <Route
                         path={"/dialogs"}
                         render={DialogsHandler}
+                    />
+                    <Route
+                        path={"/sfriends"}
+                        render={UsersHandler}
                     />
 
                 </div>

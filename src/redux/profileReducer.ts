@@ -1,13 +1,17 @@
-import {ActionsTypes, PostsType, ProfilePageType} from "./store";
-
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
 const ADD_POST = 'ADD-POST'
 
-export type ProfileReducerType =
-    ReturnType<typeof addPostAC> |
-    ReturnType<typeof updateNewPostTextAC>
+export type ProfilePageType = {
+    posts: Array<PostsType>
+    newPostText: string
+}
+export type PostsType = {
+    id: number
+    message: string
+    likesCount: number
+}
 
-let initialState:ProfilePageType={
+let initialState: ProfilePageType = {
     posts: [
         {id: 1, message: 'Hi, how are you?', likesCount: 13},
         {id: 2, message: 'It\'s my first post', likesCount: 22}
@@ -15,35 +19,27 @@ let initialState:ProfilePageType={
     newPostText: ''
 }
 
-export const profileReducer = (state=initialState, action: ActionsTypes) => {
-    /*switch (action.type){
-        case ADD_POST:
+export const profileReducer = (state:ProfilePageType = initialState, action: ActionsTypes) => {
+    switch (action.type){
+        case ADD_POST:{
             let newPost: PostsType = {
                 id: new Date().getTime(),
                 message: state.newPostText,
                 likesCount: 0
-            };
-            state.posts.push(newPost);
-            state.newPostText = '';
-            return state;
-        case  UPDATE_NEW_POST_TEXT:
-            state.newPostText = action.newPostText;
-            return state;
-        default:
-            return state*/
-    if (action.type === ADD_POST) {
-        let newPost: PostsType = {
-            id: new Date().getTime(),
-            message: state.newPostText,
-            likesCount: 0
+            }
+            return {...state, posts: [newPost,...state.posts],newPostText:''}
         }
-        state.posts.push(newPost)
-        state.newPostText = ''
-    } else if (action.type === UPDATE_NEW_POST_TEXT) {
-        state.newPostText = action.newPostText
+        case UPDATE_NEW_POST_TEXT:{
+            return {...state, newPostText: action.newPostText}
+        }
+        default:
+            return state
     }
-    return state
-    }
+}
+
+export type ActionsTypes =
+    ReturnType<typeof addPostAC>
+    | ReturnType<typeof updateNewPostTextAC>
 
 export const addPostAC = () => {
     return {
