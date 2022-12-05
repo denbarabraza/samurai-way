@@ -13,7 +13,7 @@ export const Users = (props: CommonUsersType) => {
 
     return (
         <div className={s.wrapper}>
-            {props.usersPage.users.map(e => <div key={e.id}>
+            {props.usersPage.users.map(e => <div key={e.id+e.name}>
                     <div className={s.items}>
                         <div className={s.item}>
                             <div>

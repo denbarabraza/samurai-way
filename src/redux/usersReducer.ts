@@ -27,7 +27,7 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         }
         case "SEND_USERS": {
             console.log(state)
-            return {...state, users: [...state.users, ...action.payload.users]}
+            return {...state, users: action.payload.users}
         }
         default:
             return state
