@@ -1,7 +1,7 @@
 import {dialogsReducer} from "./dialogsReducer";
 import {sidebarReducer} from "./sidebarReducer";
 
- type PostsType = {
+type PostsType = {
     id: number
     message: string
     likesCount: number
@@ -14,7 +14,7 @@ type DialogsType = {
     id: number
     name: string
 }
- type ProfilePageType = {
+type ProfilePageType = {
     posts: Array<PostsType>
     newPostText: string
 }
@@ -23,27 +23,27 @@ type DialogsPageType = {
     dialogs: Array<DialogsType>
     newMessageText: string
 }
- type SidebarType = {
+type SidebarType = {
     friends: Array<FriendsType>
 }
- type FriendsType = {
+type FriendsType = {
     id: number
     name: string
 }
- type RootStateType = {
+type RootStateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
     sidebar: SidebarType
 }
 
- type StoreType = {
+type StoreType = {
     _state: RootStateType
     getState: () => RootStateType
     callSubscribe: () => void
     subscribe: (observer: () => void) => void
     dispatch: (action: any) => void
 }
- let store: StoreType = {
+let store: StoreType = {
     _state: {
         profilePage: {
             posts: [
@@ -92,9 +92,9 @@ type DialogsPageType = {
         this.callSubscribe = observer
     },
     dispatch(action) {
-        this._state.dialogsPage=dialogsReducer(this._state.dialogsPage,action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
         /*this._state.profilePage=profileReducer(this._state.profilePage,action)*/
-        this._state.sidebar=sidebarReducer(this._state.sidebar,action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
         this.callSubscribe()
     },
 }

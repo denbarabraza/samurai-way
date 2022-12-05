@@ -12,8 +12,8 @@ type MapStateToPropsType = {
     usersPage: UsersPageType
 }
 type MapDispatchToPropsType = {
-    followedHandler: (userID: string) => void
-    unFollowedHandler: (userID: string) => void
+    followedHandler: (userID: number) => void
+    unFollowedHandler: (userID: number) => void
     setUsers: (users: UserType[]) => void
 }
 
@@ -24,10 +24,10 @@ const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
 }
 const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
     return {
-        followedHandler: (userID: string) => {
+        followedHandler: (userID: number) => {
             dispatch(followedAC(userID))
         },
-        unFollowedHandler: (userID: string) => {
+        unFollowedHandler: (userID: number) => {
             dispatch(unFollowedAC(userID))
         },
         setUsers: (users: UserType[]) => {
