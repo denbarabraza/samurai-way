@@ -35,3 +35,7 @@
     height: 50px;
     border-radius: 40px;
 }
+.selectPage{
+    font-weight: bold;
+    background-color: white;
+}

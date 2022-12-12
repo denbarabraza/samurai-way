@@ -1,5 +1,8 @@
 export type UsersPageType = {
     users: Array<UserType>
+    totalUserCount: number
+    pageSize: number
+    currentPage: number
 }
 export type UserType = {
     "name": string
@@ -14,20 +17,48 @@ export type UserType = {
 }
 
 let initialState: UsersPageType = {
-    users: []
+    users: [],
+    totalUserCount: 0,
+    pageSize: 5,
+    currentPage:1
 }
 
 export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
     switch (action.type) {
         case "FOLLOWED": {
-            return {...state, users: state.users.map(e => e.id === action.payload.userID ? {...e, followed: false} : e)}
+            return {
+                ...state,
+                users: state.users.map(e => e.id === action.payload.userID ? {...e, followed: false}
+                    : e
+                )
+            }
         }
         case "UN_FOLLOWED": {
-            return {...state, users: state.users.map(e => e.id === action.payload.userID ? {...e, followed: true} : e)}
+            return {
+                ...state,
+                users: state.users.map(e => e.id === action.payload.userID
+                    ? {...e, followed: true}
+                    : e
+                )
+            }
         }
         case "SEND_USERS": {
-            console.log(state)
-            return {...state, users: action.payload.users}
+            return {
+                ...state,
+                users: action.payload.users
+            }
+        }
+        case "SET_CURRENT_PAGE": {
+            return {
+                ...state,
+                currentPage:action.payload.currentPage
+            }
+        }
+        case "SET_TOTAL_USER_COUNT": {
+            return {
+                ...state,
+                totalUserCount:action.payload.count
+            }
         }
         default:
             return state
@@ -38,6 +69,8 @@ type ActionsTypes =
     ReturnType<typeof followedAC>
     | ReturnType<typeof unFollowedAC>
     | ReturnType<typeof sendUserAC>
+    | ReturnType<typeof setCurrentPageAC>
+    | ReturnType<typeof setTotalUserCountAC>
 
 export const followedAC = (userID: number) => {
     return {
@@ -60,6 +93,22 @@ export const sendUserAC = (users: UserType[]) => {
         type: 'SEND_USERS',
         payload: {
             users
+        }
+    } as const
+}
+export const setCurrentPageAC = (currentPage:number) => {
+    return {
+        type: 'SET_CURRENT_PAGE',
+        payload: {
+            currentPage
+        }
+    } as const
+}
+export const setTotalUserCountAC = (count:number) => {
+    return {
+        type: 'SET_TOTAL_USER_COUNT',
+        payload: {
+            count
         }
     } as const
 }
