@@ -4,12 +4,15 @@ import {Dispatch} from "redux";
 import {
     followedAC,
     sendUserAC,
-    setCurrentPageAC, setTotalUserCountAC,
+    setCurrentPageAC,
+    setTotalUserCountAC,
     unFollowedAC,
     UsersPageType,
     UserType
 } from "../../redux/usersReducer";
-import {UsersC} from "./UsersС";
+import React from "react";
+import axios from "axios";
+import {Users} from "./Users";
 
 export type CommonUsersType =
     MapStateToPropsType
@@ -29,6 +32,41 @@ type MapDispatchToPropsType = {
     setTotalUserCount: (count:number) => void
 }
 
+//Second Container Component
+export class UsersC extends React.Component<CommonUsersType> {
+    componentDidMount() {
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+            .then(response => {
+                this.props.setUsers(response.data.items);
+                this.props.setTotalUserCount(response.data.totalCount);
+            })
+    }
+
+    onclickChangedPage = (pageNumber: number) => {
+        this.props.setCurrentPage(pageNumber)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
+            .then(response => {
+                this.props.setUsers(response.data.items);
+            })
+    }
+
+    render() {
+        return <>
+            <Users
+                totalUserCount={this.props.totalUserCount}
+                pageSize={this.props.pageSize}
+                currentPage={this.props.currentPage}
+                usersPage={this.props.usersPage}
+                followedHandler={this.props.followedHandler}
+                unFollowedHandler={this.props.unFollowedHandler}
+                onclickChangedPage={this.onclickChangedPage}
+            />
+        </>
+    }
+}
+
+
+//First Container Component
 const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
     return {
         usersPage: state.usersPage,

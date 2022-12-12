@@ -1,19 +1,42 @@
 import React from 'react';
-import {CommonUsersType} from "./UsersContainer";
 import s from './Users.module.css'
-import axios from "axios";
 import userPhoto from './../../assets/images/user.jpg'
+import {UsersPageType} from "../../redux/usersReducer";
 
-export const Users = (props: CommonUsersType) => {
+type UsersPropsType={
+    totalUserCount:number
+    pageSize:number
+    currentPage:number
+    usersPage:UsersPageType
+    followedHandler: (userID: number) => void
+    unFollowedHandler: (userID: number) => void
+    onclickChangedPage: (pageNumber: number) => void
+}
 
-    if (props.usersPage.users.length === 0) {
-        axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response =>
-            props.setUsers(response.data.items))
+export const Users:React.FC<UsersPropsType> = (props) => {
+
+    let pagesCount = Math.ceil(props.totalUserCount / props.pageSize)
+    let pages = [];
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i)
     }
 
     return (
         <div className={s.wrapper}>
-            {props.usersPage.users.map(e => <div key={e.id+e.name}>
+            <div>
+                {pages.map(p => {
+                    return <span
+                        onClick={() => props.onclickChangedPage(p)}
+                        className={props.currentPage === p
+                            ? s.selectPage
+                            : ""
+                        }
+                    >
+                            {p}
+                        </span>
+                })}
+            </div>
+            {props.usersPage.users.map(e => <div key={e.id + e.name}>
                     <div className={s.items}>
                         <div className={s.item}>
                             <div>
@@ -24,8 +47,14 @@ export const Users = (props: CommonUsersType) => {
                             </div>
                             <div>
                                 {e.followed
-                                    ? <button onClick={() => props.followedHandler(e.id)}>Unfollowed</button>
-                                    : <button onClick={() => props.unFollowedHandler(e.id)}>Followed</button>
+                                    ? <button
+                                        onClick={() => props.followedHandler(e.id)}>
+                                        Unfollowed
+                                </button>
+                                    : <button
+                                        onClick={() => props.unFollowedHandler(e.id)}>
+                                        Followed
+                                    </button>
                                 }
                             </div>
                         </div>
@@ -48,4 +77,5 @@ export const Users = (props: CommonUsersType) => {
             )}
         </div>
     );
-};
+}
+
