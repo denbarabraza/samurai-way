@@ -3,6 +3,7 @@ export type UsersPageType = {
     totalUserCount: number
     pageSize: number
     currentPage: number
+    isLoading:boolean
 }
 export type UserType = {
     "name": string
@@ -20,7 +21,8 @@ let initialState: UsersPageType = {
     users: [],
     totalUserCount: 0,
     pageSize: 5,
-    currentPage:1
+    currentPage:1,
+    isLoading: true
 }
 
 export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
@@ -60,6 +62,12 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
                 totalUserCount:action.payload.count
             }
         }
+        case "SET_LOADING_VALUE": {
+            return {
+                ...state,
+                isLoading:action.payload.isLoading
+            }
+        }
         default:
             return state
     }
@@ -71,6 +79,7 @@ type ActionsTypes =
     | ReturnType<typeof sendUserAC>
     | ReturnType<typeof setCurrentPageAC>
     | ReturnType<typeof setTotalUserCountAC>
+    | ReturnType<typeof setLoadingValueAC>
 
 export const followedAC = (userID: number) => {
     return {
@@ -112,7 +121,14 @@ export const setTotalUserCountAC = (count:number) => {
         }
     } as const
 }
-
+export const setLoadingValueAC = (isLoading:boolean) => {
+    return {
+        type: 'SET_LOADING_VALUE',
+        payload: {
+            isLoading
+        }
+    } as const
+}
 
 //[
 //                 {

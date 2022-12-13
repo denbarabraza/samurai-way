@@ -2,18 +2,19 @@ import React from 'react';
 import s from './Users.module.css'
 import userPhoto from './../../assets/images/user.jpg'
 import {UsersPageType} from "../../redux/usersReducer";
+import {NavLink} from "react-router-dom";
 
-type UsersPropsType={
-    totalUserCount:number
-    pageSize:number
-    currentPage:number
-    usersPage:UsersPageType
+type UsersPropsType = {
+    totalUserCount: number
+    pageSize: number
+    currentPage: number
+    usersPage: UsersPageType
     followedHandler: (userID: number) => void
     unFollowedHandler: (userID: number) => void
     onclickChangedPage: (pageNumber: number) => void
 }
 
-export const Users:React.FC<UsersPropsType> = (props) => {
+export const Users: React.FC<UsersPropsType> = (props) => {
 
     let pagesCount = Math.ceil(props.totalUserCount / props.pageSize)
     let pages = [];
@@ -40,17 +41,19 @@ export const Users:React.FC<UsersPropsType> = (props) => {
                     <div className={s.items}>
                         <div className={s.item}>
                             <div>
-                                <img src={e.photos.small
-                                    ? e.photos.small
-                                    : userPhoto
-                                }/>
+                                <NavLink to={'/profile/' + e.id}>
+                                    <img src={e.photos.small
+                                        ? e.photos.small
+                                        : userPhoto
+                                    }/>
+                                </NavLink>
                             </div>
                             <div>
                                 {e.followed
                                     ? <button
                                         onClick={() => props.followedHandler(e.id)}>
                                         Unfollowed
-                                </button>
+                                    </button>
                                     : <button
                                         onClick={() => props.unFollowedHandler(e.id)}>
                                         Followed

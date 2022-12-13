@@ -1,20 +1,17 @@
 import React from 'react';
 import './App.css';
 import {Header} from "./components/Header/Header";
-import {Profile} from "./components/Profile/Profile";
 import {BrowserRouter, Route} from "react-router-dom";
 import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
 import {NavbarContainer} from "./components/Navbar/NavbarContainer";
 import {UsersContainer} from "./components/Users/UsersContainer";
-
-/*type AppPropsType = {
-    store: AppStoreType
-}*/
-
-const App = (/*props: AppPropsType*/) => {
+import ProfileContainer from "./components/Profile/ProfileContainer";
 
 
-    const ProfileHandler = () => <Profile  />
+const App = () => {
+
+
+    const ProfileHandler = () => <ProfileContainer  />
     const DialogsHandler = () => <DialogsContainer />
     const UsersHandler = () => <UsersContainer />
 
@@ -27,7 +24,7 @@ const App = (/*props: AppPropsType*/) => {
                 <div className={"app-wrapper-content"}>
 
                     <Route
-                        path={"/profile"}
+                        path={'/profile/:userID?'}
                         render={ProfileHandler}
                     />
                     <Route
