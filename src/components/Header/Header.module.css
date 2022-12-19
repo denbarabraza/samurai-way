@@ -5,4 +5,12 @@
 .header {
     grid-area: h;
     background-color: antiquewhite;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loginBlock a{
+    color: black;
+    padding-right: 100px;
 }

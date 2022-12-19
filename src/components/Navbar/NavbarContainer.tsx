@@ -35,8 +35,8 @@ const Navbar = (props: CommonNavbarType) => {
                 </NavLink>
             </div>
             <div className={s.item}>
-                <NavLink to={"/sfriends"} activeClassName={s.activeLink}>
-                    Search Friends
+                <NavLink to={"/user"} activeClassName={s.activeLink}>
+                    User
                 </NavLink>
             </div>
             <div className={s.item}>

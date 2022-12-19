@@ -10,7 +10,7 @@ export type ProfileType = {
         github: string
         mainLink: null
     },
-    lookingForAJob: true,
+    lookingForAJob: boolean,
     lookingForAJobDescription: string
     fullName: string
     userId:number

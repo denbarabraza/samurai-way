@@ -3,6 +3,7 @@ import s from './Users.module.css'
 import userPhoto from './../../assets/images/user.jpg'
 import {UsersPageType} from "../../redux/usersReducer";
 import {NavLink} from "react-router-dom";
+import axios from "axios";
 
 type UsersPropsType = {
     totalUserCount: number
@@ -22,6 +23,33 @@ export const Users: React.FC<UsersPropsType> = (props) => {
         pages.push(i)
     }
 
+    const onClickUnfollowedHandler = (idUser:number) => {
+        axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${idUser}`, {
+            withCredentials: true,
+            headers: {
+                'API-KEY': '8f06781b-9aa8-47ca-9636-db5da3b1bd57'
+            }
+        })
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    props.followedHandler(idUser)
+                }
+            })
+    }
+    const onClickFollowedHandler = (idUser:number) => {
+        axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${idUser}`, {}, {
+            withCredentials: true,
+            headers: {
+                'API-KEY': '8f06781b-9aa8-47ca-9636-db5da3b1bd57'
+            }
+        })
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    props.unFollowedHandler(idUser)
+                }
+            })
+    }
+
     return (
         <div className={s.wrapper}>
             <div>
@@ -31,8 +59,7 @@ export const Users: React.FC<UsersPropsType> = (props) => {
                         className={props.currentPage === p
                             ? s.selectPage
                             : ""
-                        }
-                    >
+                        }>
                             {p}
                         </span>
                 })}
@@ -50,12 +77,11 @@ export const Users: React.FC<UsersPropsType> = (props) => {
                             </div>
                             <div>
                                 {e.followed
-                                    ? <button
-                                        onClick={() => props.followedHandler(e.id)}>
+                                    ? <button onClick={() =>onClickUnfollowedHandler(e.id) }>
                                         Unfollowed
                                     </button>
                                     : <button
-                                        onClick={() => props.unFollowedHandler(e.id)}>
+                                        onClick={() => onClickFollowedHandler(e.id)}>
                                         Followed
                                     </button>
                                 }
