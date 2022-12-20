@@ -3,7 +3,7 @@ import {RootReducerType} from "../../redux/redux-store";
 import {
     followedAC,
     sendUserAC,
-    setCurrentPageAC,
+    setCurrentPageAC, setFollowProgressAC,
     setLoadingValueAC,
     setTotalUserCountAC,
     unFollowedAC,
@@ -11,9 +11,9 @@ import {
     UserType
 } from "../../redux/usersReducer";
 import React from "react";
-import axios from "axios";
 import {Users} from "./Users";
 import {Preloader} from "../common/Preloader";
+import {usersAPI} from "../../API/apiI";
 
 
 export type CommonUsersType =
@@ -26,6 +26,7 @@ type MapStateToPropsType = {
     totalUserCount: number
     currentPage: number
     isLoading: boolean
+    followInProgress:Array<number>
 }
 type MapDispatchToPropsType = {
     followedHandler: (userID: number) => void
@@ -34,28 +35,29 @@ type MapDispatchToPropsType = {
     setCurrentPage: (currentPage: number) => void
     setTotalUserCount: (count: number) => void
     setLoadingValue: (isLoading: boolean) => void
+    setFollowProgress: (isFollow: boolean, userID: number) => void
 }
 
 //Second Container Component
 export class UsersC extends React.Component<CommonUsersType> {
     componentDidMount() {
         this.props.setLoadingValue(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {withCredentials: true})
-            .then(response => {
-                this.props.setLoadingValue(false)
-                this.props.setUsers(response.data.items);
-                this.props.setTotalUserCount(response.data.totalCount);
-            })
+        //вынесли запрос в API
+        usersAPI.getUser(this.props.currentPage, this.props.pageSize).then(data => {
+            this.props.setLoadingValue(false)
+            this.props.setUsers(data.items);
+            this.props.setTotalUserCount(data.totalCount);
+        })
     }
 
     onclickChangedPage = (pageNumber: number) => {
         this.props.setLoadingValue(true)
         this.props.setCurrentPage(pageNumber)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`, {withCredentials: true})
-            .then(response => {
-                this.props.setLoadingValue(false)
-                this.props.setUsers(response.data.items);
-            })
+        //вынесли запрос в API
+        usersAPI.getUser(pageNumber, this.props.pageSize).then(data => {
+            this.props.setLoadingValue(false)
+            this.props.setUsers(data.items);
+        })
     }
 
     render() {
@@ -70,6 +72,8 @@ export class UsersC extends React.Component<CommonUsersType> {
                     followedHandler={this.props.followedHandler}
                     unFollowedHandler={this.props.unFollowedHandler}
                     onclickChangedPage={this.onclickChangedPage}
+                    setFollowProgress={this.props.setFollowProgress}
+                    followInProgress={this.props.followInProgress}
                 />}
         </>
     }
@@ -83,7 +87,8 @@ const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
         pageSize: state.usersPage.pageSize,
         totalUserCount: state.usersPage.totalUserCount,
         currentPage: state.usersPage.currentPage,
-        isLoading: state.usersPage.isLoading
+        isLoading: state.usersPage.isLoading,
+        followInProgress: state.usersPage.followInProgress
     }
 }
 
@@ -94,8 +99,11 @@ const mapDispatchToProps = {
     setUsers: sendUserAC,
     setCurrentPage: setCurrentPageAC,
     setTotalUserCount: setTotalUserCountAC,
-    setLoadingValue: setLoadingValueAC
+    setLoadingValue: setLoadingValueAC,
+    setFollowProgress:setFollowProgressAC
 }
+
+export const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersC)
 
 //mapDispatchToProps=>Function
 /*const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
@@ -120,4 +128,3 @@ const mapDispatchToProps = {
         }
     }
 }*/
-export const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersC)

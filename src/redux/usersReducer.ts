@@ -3,26 +3,28 @@ export type UsersPageType = {
     totalUserCount: number
     pageSize: number
     currentPage: number
-    isLoading:boolean
+    isLoading: boolean
+    followInProgress: Array<number>
 }
 export type UserType = {
-    "name": string
-    "id": number
-    "uniqueUrlName": string
-    "photos": {
-        "small": string
-        "large": string
+    name: string
+    id: number
+    uniqueUrlName: string
+    photos: {
+        small: string
+        large: string
     }
-    "status": string
-    "followed": boolean
+    status: string
+    followed: boolean
 }
 
 let initialState: UsersPageType = {
     users: [],
     totalUserCount: 0,
     pageSize: 5,
-    currentPage:1,
-    isLoading: true
+    currentPage: 1,
+    isLoading: true,
+    followInProgress: []
 }
 
 export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
@@ -30,7 +32,8 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         case "FOLLOWED": {
             return {
                 ...state,
-                users: state.users.map(e => e.id === action.payload.userID ? {...e, followed: false}
+                users: state.users.map(e => e.id === action.payload.userID
+                    ? {...e, followed: true}
                     : e
                 )
             }
@@ -39,7 +42,7 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
             return {
                 ...state,
                 users: state.users.map(e => e.id === action.payload.userID
-                    ? {...e, followed: true}
+                    ? {...e, followed: false}
                     : e
                 )
             }
@@ -53,19 +56,27 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
         case "SET_CURRENT_PAGE": {
             return {
                 ...state,
-                currentPage:action.payload.currentPage
+                currentPage: action.payload.currentPage
             }
         }
         case "SET_TOTAL_USER_COUNT": {
             return {
                 ...state,
-                totalUserCount:action.payload.count
+                totalUserCount: action.payload.count
             }
         }
         case "SET_LOADING_VALUE": {
             return {
                 ...state,
-                isLoading:action.payload.isLoading
+                isLoading: action.payload.isLoading
+            }
+        }
+        case "SET_FOLLOW_PROGRESS": {
+            return {
+                ...state,
+                followInProgress: action.payload.isFollowProgress
+                    ? [...state.followInProgress, action.payload.userID]
+                    : state.followInProgress.filter(id=>id!==action.payload.userID)
             }
         }
         default:
@@ -80,6 +91,7 @@ type ActionsTypes =
     | ReturnType<typeof setCurrentPageAC>
     | ReturnType<typeof setTotalUserCountAC>
     | ReturnType<typeof setLoadingValueAC>
+    | ReturnType<typeof setFollowProgressAC>
 
 export const followedAC = (userID: number) => {
     return {
@@ -105,7 +117,7 @@ export const sendUserAC = (users: UserType[]) => {
         }
     } as const
 }
-export const setCurrentPageAC = (currentPage:number) => {
+export const setCurrentPageAC = (currentPage: number) => {
     return {
         type: 'SET_CURRENT_PAGE',
         payload: {
@@ -113,7 +125,7 @@ export const setCurrentPageAC = (currentPage:number) => {
         }
     } as const
 }
-export const setTotalUserCountAC = (count:number) => {
+export const setTotalUserCountAC = (count: number) => {
     return {
         type: 'SET_TOTAL_USER_COUNT',
         payload: {
@@ -121,11 +133,20 @@ export const setTotalUserCountAC = (count:number) => {
         }
     } as const
 }
-export const setLoadingValueAC = (isLoading:boolean) => {
+export const setLoadingValueAC = (isLoading: boolean) => {
     return {
         type: 'SET_LOADING_VALUE',
         payload: {
             isLoading
+        }
+    } as const
+}
+export const setFollowProgressAC = (isFollowProgress: boolean, userID: number) => {
+    return {
+        type: 'SET_FOLLOW_PROGRESS',
+        payload: {
+            isFollowProgress,
+            userID
         }
     } as const
 }
