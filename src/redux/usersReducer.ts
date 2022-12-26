@@ -1,3 +1,7 @@
+import {usersAPI} from "../API/api";
+import {Dispatch} from "redux";
+import {RootActionsType} from "./redux-store";
+
 export type UsersPageType = {
     users: Array<UserType>
     totalUserCount: number
@@ -27,7 +31,7 @@ let initialState: UsersPageType = {
     followInProgress: []
 }
 
-export const usersReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
+export const usersReducer = (state: UsersPageType = initialState, action: UsersActionsTypes): UsersPageType => {
     switch (action.type) {
         case "FOLLOWED": {
             return {
@@ -76,7 +80,7 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
                 ...state,
                 followInProgress: action.payload.isFollowProgress
                     ? [...state.followInProgress, action.payload.userID]
-                    : state.followInProgress.filter(id=>id!==action.payload.userID)
+                    : state.followInProgress.filter(id => id !== action.payload.userID)
             }
         }
         default:
@@ -84,15 +88,16 @@ export const usersReducer = (state: UsersPageType = initialState, action: Action
     }
 }
 
-type ActionsTypes =
+export type UsersActionsTypes =
     ReturnType<typeof followedAC>
     | ReturnType<typeof unFollowedAC>
-    | ReturnType<typeof sendUserAC>
+    | ReturnType<typeof setUserAC>
     | ReturnType<typeof setCurrentPageAC>
     | ReturnType<typeof setTotalUserCountAC>
     | ReturnType<typeof setLoadingValueAC>
     | ReturnType<typeof setFollowProgressAC>
 
+//Action Creator
 export const followedAC = (userID: number) => {
     return {
         type: 'FOLLOWED',
@@ -109,7 +114,7 @@ export const unFollowedAC = (userID: number) => {
         }
     } as const
 }
-export const sendUserAC = (users: UserType[]) => {
+export const setUserAC = (users: UserType[]) => {
     return {
         type: 'SEND_USERS',
         payload: {
@@ -151,38 +156,39 @@ export const setFollowProgressAC = (isFollowProgress: boolean, userID: number) =
     } as const
 }
 
-//[
-//                 {
-//                     id: '1',
-//                     photoURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9Ew488dUE4fi9yDUTTn7H71pW1NjjDIrwdg&usqp=CAU',
-//                     followed: false,
-//                     fullName: 'Denis Bareischev',
-//                     status: 'I want to IT',
-//                     location: {
-//                         city: 'Minsk',
-//                         country: 'Belarus'
-//                     }
-//                 },
-//                 {
-//                     id: '2',
-//                     photoURL: 'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/3045138.png&w=350&h=254',
-//                     followed: true,
-//                     fullName: 'Mike Cala',
-//                     status: 'I like salt',
-//                     location: {
-//                         city: 'Milan',
-//                         country: 'Italy'
-//                     }
-//                 },
-//                 {
-//                     id: '3',
-//                     photoURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToWu2AgZKpP9kNj1GuOA6-tlFunx36xcFhbg&usqp=CAU',
-//                     followed: true,
-//                     fullName: 'Victor Popov',
-//                     status: 'I am crazy man',
-//                     location: {
-//                         city: 'Moscow',
-//                         country: 'Russia'
-//                     }
-//                 }
-//             ]
+//Thunk Creator
+export const getUsersThunk = (currentPage: number, pageSize: number) => {
+    return (dispatch: Dispatch<RootActionsType>) => {
+        dispatch(setLoadingValueAC(true))
+        dispatch(setCurrentPageAC(currentPage))
+        usersAPI.getUser(currentPage, pageSize)
+            .then(data => {
+                dispatch(setLoadingValueAC(false))
+                dispatch(setUserAC(data.items));
+                dispatch(setTotalUserCountAC(data.totalCount));
+            })
+    }
+}
+export const followThunk = (idUser:number) => {
+    return (dispatch: Dispatch<RootActionsType>) => {
+        dispatch(setFollowProgressAC(true, idUser))
+        usersAPI.getFollow(idUser).then(data => {
+            if (data.resultCode === 0) {
+                dispatch(followedAC(idUser))
+            }
+            dispatch(setFollowProgressAC(false, idUser))
+        })
+    }
+}
+export const unFollowThunk = (idUser:number) => {
+    return (dispatch: Dispatch<RootActionsType>) => {
+        dispatch(setFollowProgressAC(true, idUser))
+        usersAPI.getUnFollow(idUser).then(data => {
+            if (data.resultCode === 0) {
+                dispatch(unFollowedAC(idUser))
+            }
+            dispatch(setFollowProgressAC(false, idUser))
+        })
+    }
+}
+

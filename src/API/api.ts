@@ -12,23 +12,20 @@ export const usersAPI={
     getUser(page:number, count:number){
         return  instance.get(`users?page=${page}&count=${count}`)
             .then(response=>response.data)
-    }
-}
-
-export const profileAPI={
-    getProfile(userID:string | number){
-        return instance.get(`profile/${userID}`)
-            .then(response=>response.data)
-    }
-}
-
-export const followAPI={
+    },
     getUnFollow(idUser:number){
         return instance.delete(`follow/${idUser}`)
             .then(response=>response.data)
     },
     getFollow(idUser:number){
         return instance.post(`follow/${idUser}`)
+            .then(response=>response.data)
+    }
+}
+
+export const profileAPI={
+    getProfile(userID:string | number){
+        return instance.get(`profile/${userID}`)
             .then(response=>response.data)
     }
 }

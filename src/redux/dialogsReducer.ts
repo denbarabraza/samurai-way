@@ -35,7 +35,7 @@ let initialState:DialogsPageType = {
     newMessageText: ''
 }
 
-export const dialogsReducer = (state:DialogsPageType = initialState, action: ActionsTypes):DialogsPageType => {
+export const dialogsReducer = (state:DialogsPageType = initialState, action: DialogsActionsTypes):DialogsPageType => {
     switch (action.type){
         case ADD_MESSAGE:{
             let newMessage: MessagesType = {
@@ -52,7 +52,7 @@ export const dialogsReducer = (state:DialogsPageType = initialState, action: Act
     }
 }
 
-export type ActionsTypes =
+export type DialogsActionsTypes =
     ReturnType<typeof addMessageAC>
     | ReturnType<typeof updateNewMessageTextAC>
 

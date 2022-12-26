@@ -1,21 +1,13 @@
 import React from 'react';
 import s from './Users.module.css'
 import userPhoto from './../../assets/images/user.jpg'
-import {UsersPageType} from "../../redux/usersReducer";
 import {NavLink} from "react-router-dom";
-import {followAPI} from "../../API/apiI";
+import {CommonUsersType} from "./UsersContainer";
 
-type UsersPropsType = {
-    totalUserCount: number
-    pageSize: number
-    currentPage: number
-    usersPage: UsersPageType
-    followedHandler: (userID: number) => void
-    unFollowedHandler: (userID: number) => void
-    onclickChangedPage: (pageNumber: number) => void
-    setFollowProgress: (isFollow: boolean, userID: number) => void
-    followInProgress: Array<number>
-}
+type UsersPropsType =CommonUsersType
+    & { onclickChangedPage: (pageNumber: number) => void}
+
+
 
 export const Users: React.FC<UsersPropsType> = (props) => {
 
@@ -26,23 +18,26 @@ export const Users: React.FC<UsersPropsType> = (props) => {
     }
 
     const onClickUnfollowedHandler = (idUser: number) => {
-        props.setFollowProgress(true, idUser)
-        followAPI.getUnFollow(idUser).then(data => {
-            if (data.resultCode === 0) {
-                props.unFollowedHandler(idUser)
-            }
-            props.setFollowProgress(false, idUser)
-        })
+        props.unFollowThunk(idUser)
+        // props.setFollowProgress(true, idUser)
+        // usersAPI.getUnFollow(idUser).then(data => {
+        //     if (data.resultCode === 0) {
+        //         props.unFollowedHandler(idUser)
+        //     }
+        //     props.setFollowProgress(false, idUser)
+        // })
     }
     const onClickFollowedHandler = (idUser: number) => {
-        props.setFollowProgress(true, idUser)
-        followAPI.getFollow(idUser).then(data => {
-            if (data.resultCode === 0) {
-                props.followedHandler(idUser)
-            }
-            props.setFollowProgress(false, idUser)
-        })
+        props.followThunk(idUser)
+        // props.setFollowProgress(true, idUser)
+        // usersAPI.getFollow(idUser).then(data => {
+        //     if (data.resultCode === 0) {
+        //         props.followedHandler(idUser)
+        //     }
+        //     props.setFollowProgress(false, idUser)
+        // })
     }
+
 
     return (
         <div className={s.wrapper}>
