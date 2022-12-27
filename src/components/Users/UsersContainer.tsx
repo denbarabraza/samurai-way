@@ -25,6 +25,7 @@ type MapStateToPropsType = {
     currentPage: number
     isLoading: boolean
     followInProgress:Array<number>
+    isAuth:boolean
 }
 type MapDispatchToPropsType = {
     followedHandler: (userID: number) => void
@@ -77,7 +78,8 @@ const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
         totalUserCount: state.usersPage.totalUserCount,
         currentPage: state.usersPage.currentPage,
         isLoading: state.usersPage.isLoading,
-        followInProgress: state.usersPage.followInProgress
+        followInProgress: state.usersPage.followInProgress,
+        isAuth:state.auth.isAuth
     }
 }
 

@@ -1,6 +1,6 @@
 import {usersAPI} from "../API/api";
 import {Dispatch} from "redux";
-import {RootActionsType} from "./redux-store";
+import {AppThunk, RootActionsType} from "./redux-store";
 
 export type UsersPageType = {
     users: Array<UserType>
@@ -157,8 +157,8 @@ export const setFollowProgressAC = (isFollowProgress: boolean, userID: number) =
 }
 
 //Thunk Creator
-export const getUsersThunk = (currentPage: number, pageSize: number) => {
-    return (dispatch: Dispatch<RootActionsType>) => {
+export const getUsersThunk = (currentPage: number, pageSize: number):AppThunk => {
+    return (dispatch) => {
         dispatch(setLoadingValueAC(true))
         dispatch(setCurrentPageAC(currentPage))
         usersAPI.getUser(currentPage, pageSize)
@@ -169,8 +169,8 @@ export const getUsersThunk = (currentPage: number, pageSize: number) => {
             })
     }
 }
-export const followThunk = (idUser:number) => {
-    return (dispatch: Dispatch<RootActionsType>) => {
+export const followThunk = (idUser:number):AppThunk => {
+    return (dispatch) => {
         dispatch(setFollowProgressAC(true, idUser))
         usersAPI.getFollow(idUser).then(data => {
             if (data.resultCode === 0) {
@@ -180,8 +180,8 @@ export const followThunk = (idUser:number) => {
         })
     }
 }
-export const unFollowThunk = (idUser:number) => {
-    return (dispatch: Dispatch<RootActionsType>) => {
+export const unFollowThunk = (idUser:number):AppThunk => {
+    return (dispatch) => {
         dispatch(setFollowProgressAC(true, idUser))
         usersAPI.getUnFollow(idUser).then(data => {
             if (data.resultCode === 0) {

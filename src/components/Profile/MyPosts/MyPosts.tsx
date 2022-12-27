@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, KeyboardEvent} from 'react';
 import {Post} from "./Posts/Post";
 import s from "./MyPosts.module.css";
 import {CommonPostType} from "./MyPostsContainer";
@@ -13,6 +13,11 @@ export const MyPosts = (props: CommonPostType) => {
     const onPostChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
         props.onPostChangeHandler(e.currentTarget.value)
     }
+    const onKeyUpHandler=(e:KeyboardEvent<HTMLTextAreaElement>)=>{
+        if(e.key==='Enter'){
+            addPost()
+        }
+    }
 
     return (
         <div className={s.postsBlock}>
@@ -22,6 +27,7 @@ export const MyPosts = (props: CommonPostType) => {
                     <textarea
                         value={props.newPostText}
                         onChange={onPostChangeHandler}
+                        onKeyUp={onKeyUpHandler}
                     />
                 </div>
                 <div>

@@ -1,11 +1,9 @@
 import React from 'react';
 import {Profile} from "./Profile";
-import axios from "axios";
 import {connect} from "react-redux";
 import {RootReducerType} from "../../redux/redux-store";
-import {ProfileType, setUserProfileAC} from "../../redux/profileReducer";
+import {getProfileThunk, ProfileType} from "../../redux/profileReducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {profileAPI} from "../../API/api";
 
 type PathParamsType = {
     userID: string
@@ -19,9 +17,10 @@ export type CommonUsersType =
 
 type MapStateToPropsType = {
     profilePage: ProfileType | null
+    isAuth: boolean
 }
 type MapDispatchToPropsType = {
-    setUserProfile: (userProfile: ProfileType) => void
+    getProfileThunk: (userID: number | string) => void
 }
 
 class ProfileContainer extends React.Component<OnUserType> {
@@ -30,10 +29,7 @@ class ProfileContainer extends React.Component<OnUserType> {
         if (!userID) {
             userID = 2;
         }
-        //вынесли запрос в API
-        profileAPI.getProfile(userID).then(data => {
-            this.props.setUserProfile(data)
-        })
+        this.props.getProfileThunk(userID)
     }
 
     render() {
@@ -45,11 +41,12 @@ class ProfileContainer extends React.Component<OnUserType> {
 
 const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
     return {
-        profilePage: state.profilePage.profile
+        profilePage: state.profilePage.profile,
+        isAuth: state.auth.isAuth
     }
 }
 const mapDispatchToProps = {
-    setUserProfile: setUserProfileAC
+    getProfileThunk: getProfileThunk
 }
 
 const WithURLDataContainerComponent = withRouter(ProfileContainer)

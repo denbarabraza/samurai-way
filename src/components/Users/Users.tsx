@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './Users.module.css'
 import userPhoto from './../../assets/images/user.jpg'
-import {NavLink} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 import {CommonUsersType} from "./UsersContainer";
 
 type UsersPropsType =CommonUsersType
@@ -19,25 +19,12 @@ export const Users: React.FC<UsersPropsType> = (props) => {
 
     const onClickUnfollowedHandler = (idUser: number) => {
         props.unFollowThunk(idUser)
-        // props.setFollowProgress(true, idUser)
-        // usersAPI.getUnFollow(idUser).then(data => {
-        //     if (data.resultCode === 0) {
-        //         props.unFollowedHandler(idUser)
-        //     }
-        //     props.setFollowProgress(false, idUser)
-        // })
     }
     const onClickFollowedHandler = (idUser: number) => {
         props.followThunk(idUser)
-        // props.setFollowProgress(true, idUser)
-        // usersAPI.getFollow(idUser).then(data => {
-        //     if (data.resultCode === 0) {
-        //         props.followedHandler(idUser)
-        //     }
-        //     props.setFollowProgress(false, idUser)
-        // })
     }
 
+    if (!props.isAuth) return <div><Redirect to={'/login'}/></div>
 
     return (
         <div className={s.wrapper}>

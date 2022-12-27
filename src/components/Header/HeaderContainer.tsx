@@ -2,18 +2,12 @@ import React from 'react';
 import {connect} from "react-redux";
 import {Header} from "./Header";
 import {RootReducerType} from "../../redux/redux-store";
-import {AuthType, setUserDataAC} from "../../redux/authReducer";
-import {authAPI} from "../../API/api";
+import {AuthType, getMeAuthThunk} from "../../redux/authReducer";
 
 
 class HeaderContainer extends React.Component<CommonAuthUserType> {
     componentDidMount() {
-        //вынесли запрос в API
-        authAPI.getMeAuth().then(data => {
-                if(data.resultCode===0){
-                    this.props.setUserData(data.data)
-                }
-            })
+        this.props.getMeAuthThunk()
     }
 
     render() {
@@ -28,7 +22,7 @@ type MapStateToProps = {
     auth: AuthType | null
 }
 type MapDispatchToProps = {
-    setUserData: (data: AuthType) => void
+    getMeAuthThunk: () => void
 }
 
 const mapStateToProps = (state: RootReducerType): MapStateToProps => {
@@ -38,7 +32,7 @@ const mapStateToProps = (state: RootReducerType): MapStateToProps => {
 }
 
 const mapDispatchToProps = {
-    setUserData: setUserDataAC
+    getMeAuthThunk: getMeAuthThunk
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)

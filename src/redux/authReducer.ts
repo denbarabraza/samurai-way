@@ -1,3 +1,6 @@
+import {AppThunk} from "./redux-store";
+import {authAPI} from "../API/api";
+
 export type AuthType = {
     id: number | null
     email: string | null
@@ -29,7 +32,7 @@ export const authReducer = (state: AuthType = initialState, action: AuthActionsT
 export type AuthActionsTypes =
     ReturnType<typeof setUserDataAC>
 
-
+//Action Creator
 export const setUserDataAC = (data:AuthType) => {
     return {
         type: 'SET_USER_DATA',
@@ -37,4 +40,16 @@ export const setUserDataAC = (data:AuthType) => {
             data
         }
     } as const
+}
+
+//Thunk Creator
+export const getMeAuthThunk=():AppThunk=>{
+    return (dispatch)=>{
+        //вынесли запрос в API
+        authAPI.getMeAuth().then(data => {
+            if(data.resultCode===0){
+                dispatch(setUserDataAC(data.data))
+            }
+        })
+    }
 }

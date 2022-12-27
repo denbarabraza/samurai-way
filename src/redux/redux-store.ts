@@ -4,7 +4,7 @@ import {ProfileActionsTypes, profileReducer} from "./profileReducer";
 import {sidebarReducer} from "./sidebarReducer";
 import {UsersActionsTypes, usersReducer} from "./usersReducer";
 import {AuthActionsTypes, authReducer} from "./authReducer";
-import thunkMiddleware from 'redux-thunk'
+import thunkMiddleware, {ThunkAction} from 'redux-thunk'
 
 
 //объединяем редюсеры
@@ -27,3 +27,6 @@ export type RootActionsType=AuthActionsTypes
 
 //создаем стор
 export let store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
+
+
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootReducerType, unknown, RootActionsType>

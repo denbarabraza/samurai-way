@@ -11,6 +11,7 @@ export type CommonDialogsType =
 
 type MapStateToProps = {
     dialogsPage: DialogsPageType
+    isAuth:boolean
 }
 type MapDispatchToProps = {
     sendMessageHandler: () => void
@@ -19,7 +20,8 @@ type MapDispatchToProps = {
 
 const mapStateToProps = (state: RootReducerType):MapStateToProps => {
     return {
-        dialogsPage: state.dialogsPage
+        dialogsPage: state.dialogsPage,
+        isAuth:state.auth.isAuth
     }
 }
 const mapDispatchToProps = (dispatch: Dispatch):MapDispatchToProps => {

@@ -1,3 +1,6 @@
+import {AppThunk} from "./redux-store";
+import {profileAPI} from "../API/api";
+
 export type ProfileType = {
     aboutMe: string
     contacts: {
@@ -66,6 +69,8 @@ export type ProfileActionsTypes =
     | ReturnType<typeof updateNewPostTextAC>
     | ReturnType<typeof setUserProfileAC>
 
+
+//Action Creator
 export const addPostAC = () => {
     return {
         type: 'ADD_POST'
@@ -84,4 +89,14 @@ export const setUserProfileAC = (userProfile: ProfileType) => {
             userProfile
         }
     } as const
+}
+
+//Thunk Creator
+export const getProfileThunk=(userID:number | string):AppThunk=>{
+    return (dispatch)=>{
+        //вынесли запрос в API
+        profileAPI.getProfile(userID).then(data => {
+            dispatch(setUserProfileAC(data))
+        })
+    }
 }
