@@ -12,6 +12,7 @@ export const ProfileDescription = (props: CommonUsersType) => {
             </div>
             <div>
                 <div>{props.profilePage?.fullName}</div>
+                <div>{props.profilePage?.aboutMe}</div>
                 <ProfileStatus {...props}/>
                 <div>{props.profilePage?.lookingForAJob}</div>
                 <div>{props.profilePage?.lookingForAJobDescription}</div>

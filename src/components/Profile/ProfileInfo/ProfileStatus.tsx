@@ -1,10 +1,16 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import {CommonUsersType} from "../ProfileContainer";
 
 export class ProfileStatus extends React.Component<CommonUsersType> {
     state = {
         editMode: false,
-        title: 'Yo'
+        newStatus: this.props.status
+    }
+
+    onChangeStatus = (e:ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            newStatus: e.currentTarget.value
+        })
     }
 
     activateEditMode = () => {
@@ -17,6 +23,7 @@ export class ProfileStatus extends React.Component<CommonUsersType> {
         this.setState({
             editMode: false
         })
+        this.props.updateUserStatus(this.state.newStatus)
     }
 
     render() {
@@ -24,12 +31,13 @@ export class ProfileStatus extends React.Component<CommonUsersType> {
             <>
                 {this.state.editMode
                     ? <input
-                        value={this.props.profilePage?.aboutMe}
+                        value={this.state.newStatus}
                         onBlur={this.deactivateEditMode}
+                        onChange={this.onChangeStatus}
                         autoFocus
                     />
                     : <span onDoubleClick={this.activateEditMode}>
-                        {this.props.profilePage?.aboutMe}
+                        {this.props.status || 'No status'}
                 </span>
                 }
             </>

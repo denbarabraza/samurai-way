@@ -16,7 +16,7 @@ export type ProfileType = {
     lookingForAJob: boolean,
     lookingForAJobDescription: string
     fullName: string
-    userId:number
+    userId: number
     photos: {
         small: string
         large: string
@@ -27,6 +27,7 @@ export type ProfilePageType = {
     posts: Array<PostsType>
     newPostText: string
     profile: ProfileType | null
+    status: string
 }
 export type PostsType = {
     id: number
@@ -40,7 +41,8 @@ let initialState: ProfilePageType = {
         {id: 2, message: 'It\'s my first post', likesCount: 22}
     ],
     newPostText: '',
-    profile: null
+    profile: null,
+    status: ''
 }
 
 export const profileReducer = (state: ProfilePageType = initialState, action: ProfileActionsTypes) => {
@@ -59,6 +61,9 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Pr
         case 'SET_USER_PROFILE': {
             return {...state, profile: action.payload.userProfile}
         }
+        case 'SET_USER_STATUS': {
+            return {...state, status: action.payload.status}
+        }
         default:
             return state
     }
@@ -68,6 +73,7 @@ export type ProfileActionsTypes =
     ReturnType<typeof addPostAC>
     | ReturnType<typeof updateNewPostTextAC>
     | ReturnType<typeof setUserProfileAC>
+    | ReturnType<typeof setUserStatusAC>
 
 
 //Action Creator
@@ -90,13 +96,44 @@ export const setUserProfileAC = (userProfile: ProfileType) => {
         }
     } as const
 }
+export const setUserStatusAC = (status: string) => {
+    return {
+        type: 'SET_USER_STATUS',
+        payload: {
+            status
+        }
+    } as const
+}
 
 //Thunk Creator
-export const getProfileThunk=(userID:number | string):AppThunk=>{
-    return (dispatch)=>{
+export const getProfileThunk = (userID: number | string): AppThunk => {
+    return (dispatch) => {
         //вынесли запрос в API
-        profileAPI.getProfile(userID).then(data => {
-            dispatch(setUserProfileAC(data))
-        })
+        profileAPI.getProfile(userID)
+            .then(data => {
+                dispatch(setUserProfileAC(data))
+            })
+    }
+}
+export const getUserStatus = (userID: number | string): AppThunk => {
+    return (dispatch) => {
+        //вынесли запрос в API
+        profileAPI.getStatus(userID)
+            .then(data => {
+                debugger
+                dispatch(setUserStatusAC(data))
+            })
+    }
+}
+export const updateUserStatus = (status: string): AppThunk => {
+    return (dispatch) => {
+        //вынесли запрос в API
+        profileAPI.updateStatus(status)
+            .then(data => {
+                debugger
+                if (data.resultCode === 0) {
+                    dispatch(setUserStatusAC(status))
+                }
+            })
     }
 }
