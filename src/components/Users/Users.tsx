@@ -1,13 +1,11 @@
 import React from 'react';
 import s from './Users.module.css'
 import userPhoto from './../../assets/images/user.jpg'
-import {NavLink, Redirect} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {CommonUsersType} from "./UsersContainer";
 
 type UsersPropsType =CommonUsersType
     & { onclickChangedPage: (pageNumber: number) => void}
-
-
 
 export const Users: React.FC<UsersPropsType> = (props) => {
 
@@ -24,9 +22,7 @@ export const Users: React.FC<UsersPropsType> = (props) => {
         props.followThunk(idUser)
     }
 
-    if (!props.isAuth) return <div><Redirect to={'/login'}/></div>
-
-    return (
+      return (
         <div className={s.wrapper}>
             <div>
                 {pages.map(p => {

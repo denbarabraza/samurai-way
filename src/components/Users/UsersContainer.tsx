@@ -12,6 +12,9 @@ import {
 import React from "react";
 import {Users} from "./Users";
 import {Preloader} from "../common/Preloader";
+import {WidthAuthRedirect} from "../../hoc/widthAuthRedirect";
+import {compose} from "redux";
+import {withRouter} from "react-router-dom";
 
 
 export type CommonUsersType =
@@ -25,7 +28,6 @@ type MapStateToPropsType = {
     currentPage: number
     isLoading: boolean
     followInProgress:Array<number>
-    isAuth:boolean
 }
 type MapDispatchToPropsType = {
     followedHandler: (userID: number) => void
@@ -40,24 +42,10 @@ type MapDispatchToPropsType = {
 export class UsersC extends React.Component<CommonUsersType> {
     componentDidMount() {
         this.props.getUsersThunk(this.props.currentPage,this.props.pageSize)
-        // this.props.setLoadingValue(true)
-        // //вынесли запрос в API
-        // usersAPI.getUser(this.props.currentPage, this.props.pageSize).then(data => {
-        //     this.props.setLoadingValue(false)
-        //     this.props.setUsers(data.items);
-        //     this.props.setTotalUserCount(data.totalCount);
-        // })
     }
 
     onclickChangedPage = (currentPage: number) => {
         this.props.getUsersThunk(currentPage,this.props.pageSize)
-        /*this.props.setLoadingValue(true)
-        this.props.setCurrentPage(pageNumber)
-        //вынесли запрос в API
-        usersAPI.getUser(pageNumber, this.props.pageSize).then(data => {
-            this.props.setLoadingValue(false)
-            // this.props.setUsers(data.items);
-        })*/
     }
 
     render() {
@@ -79,10 +67,8 @@ const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
         currentPage: state.usersPage.currentPage,
         isLoading: state.usersPage.isLoading,
         followInProgress: state.usersPage.followInProgress,
-        isAuth:state.auth.isAuth
     }
 }
-
 //mapDispatchToProps=>Object
 const mapDispatchToProps = {
     followedHandler: followedAC,
@@ -93,7 +79,10 @@ const mapDispatchToProps = {
     unFollowThunk: unFollowThunk,
 }
 
-export const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersC)
+export const UsersContainer = compose<React.ComponentType>(
+    connect(mapStateToProps, mapDispatchToProps),
+    WidthAuthRedirect
+)(UsersC)
 
 //mapDispatchToProps=>Function
 /*const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {

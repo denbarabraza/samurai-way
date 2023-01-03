@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {RootReducerType} from "../../redux/redux-store";
 import {getProfileThunk, ProfileType} from "../../redux/profileReducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
+import {WidthAuthRedirect} from "../../hoc/widthAuthRedirect";
+import {compose} from "redux";
 
 type PathParamsType = {
     userID: string
@@ -17,7 +19,6 @@ export type CommonUsersType =
 
 type MapStateToPropsType = {
     profilePage: ProfileType | null
-    isAuth: boolean
 }
 type MapDispatchToPropsType = {
     getProfileThunk: (userID: number | string) => void
@@ -42,12 +43,18 @@ class ProfileContainer extends React.Component<OnUserType> {
 const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
     return {
         profilePage: state.profilePage.profile,
-        isAuth: state.auth.isAuth
     }
 }
 const mapDispatchToProps = {
     getProfileThunk: getProfileThunk
 }
 
-const WithURLDataContainerComponent = withRouter(ProfileContainer)
-export default connect(mapStateToProps, mapDispatchToProps)(WithURLDataContainerComponent)
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, mapDispatchToProps),
+    withRouter,
+    WidthAuthRedirect
+)(ProfileContainer)
+
+//1.connect
+//2.withRouter
+//3.WidthAuthRedirect
