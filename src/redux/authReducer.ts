@@ -1,18 +1,29 @@
 import {AppThunk} from "./redux-store";
 import {authAPI} from "../API/api";
+import {FormDataType} from "../components/Login/Login";
 
+
+export type LoginRensponseType = {
+    resultCode: number
+    messages: string[]
+    data: {
+        userId: number
+    }
+}
 export type AuthType = {
     id: number | null
     email: string | null
     login: string | null
-    isAuth:boolean
+    isAuth: boolean
+    userID:number
 }
 
 let initialState: AuthType = {
     id: null,
     email: null,
     login: null,
-    isAuth:false
+    isAuth: false,
+    userID: 0
 }
 
 export const authReducer = (state: AuthType = initialState, action: AuthActionsTypes): AuthType => {
@@ -21,7 +32,13 @@ export const authReducer = (state: AuthType = initialState, action: AuthActionsT
             return {
                 ...state,
                 ...action.payload.data,
-                isAuth:true
+                isAuth: true
+            }
+        }
+        case "SET_LOGIN_AUTH": {
+            return {
+                ...state,
+                userID: action.payload.userID
             }
         }
         default:
@@ -31,9 +48,10 @@ export const authReducer = (state: AuthType = initialState, action: AuthActionsT
 
 export type AuthActionsTypes =
     ReturnType<typeof setUserDataAC>
+   | ReturnType<typeof setLoginAuthAC>
 
 //Action Creator
-export const setUserDataAC = (data:AuthType) => {
+export const setUserDataAC = (data: AuthType) => {
     return {
         type: 'SET_USER_DATA',
         payload: {
@@ -41,15 +59,36 @@ export const setUserDataAC = (data:AuthType) => {
         }
     } as const
 }
+export const setLoginAuthAC = (userID: number) => {
+    return {
+        type: 'SET_LOGIN_AUTH',
+        payload: {
+            userID
+        }
+    } as const
+}
 
 //Thunk Creator
-export const getMeAuthThunk=():AppThunk=>{
-    return (dispatch)=>{
+export const getMeAuthThunk = (): AppThunk => {
+    return (dispatch) => {
         //вынесли запрос в API
-        authAPI.getMeAuth().then(data => {
-            if(data.resultCode===0){
-                dispatch(setUserDataAC(data.data))
-            }
-        })
+        authAPI.getMeAuth()
+            .then(data => {
+                if (data.resultCode === 0) {
+                    dispatch(setUserDataAC(data.data))
+                }
+            })
+    }
+}
+
+export const setLoginAuthThunk = (formData:FormDataType): AppThunk => {
+    return (dispatch) => {
+        debugger
+        authAPI.setLoginAuth(formData)
+            .then(data => {
+                if (data.resultCode === 0) {
+                    dispatch(setLoginAuthAC(data.data.userId))
+                }
+            })
     }
 }

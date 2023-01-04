@@ -1,13 +1,27 @@
 import React, {ChangeEvent} from 'react';
 import {CommonUsersType} from "../ProfileContainer";
 
+type StateType={
+    editMode: boolean
+    newStatus: string
+}
+
 export class ProfileStatus extends React.Component<CommonUsersType> {
-    state = {
+    state:StateType = {
         editMode: false,
         newStatus: this.props.status
     }
 
-    onChangeStatus = (e:ChangeEvent<HTMLInputElement>) => {
+    componentDidUpdate(prevProps: Readonly<CommonUsersType>, prevState: Readonly<StateType>) {
+        debugger
+        if (prevProps.status !== this.props.status) {
+            this.setState({
+                newStatus: this.props.status
+            })
+        }
+    }
+
+    onChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({
             newStatus: e.currentTarget.value
         })

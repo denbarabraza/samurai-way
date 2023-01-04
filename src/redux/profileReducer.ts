@@ -62,6 +62,7 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Pr
             return {...state, profile: action.payload.userProfile}
         }
         case 'SET_USER_STATUS': {
+            debugger
             return {...state, status: action.payload.status}
         }
         default:
@@ -130,7 +131,6 @@ export const updateUserStatus = (status: string): AppThunk => {
         //вынесли запрос в API
         profileAPI.updateStatus(status)
             .then(data => {
-                debugger
                 if (data.resultCode === 0) {
                     dispatch(setUserStatusAC(status))
                 }

@@ -1,4 +1,6 @@
 import axios from "axios";
+import {FormDataType} from "../components/Login/Login";
+import {LoginRensponseType} from "../redux/authReducer";
 
 const instance = axios.create({
     withCredentials: true,
@@ -18,6 +20,7 @@ export const usersAPI = {
             .then(response => response.data)
     },
     getFollow(idUser: number) {
+        debugger
         return instance.post(`follow/${idUser}`)
             .then(response => response.data)
     }
@@ -42,8 +45,15 @@ export const authAPI = {
     getMeAuth() {
         return instance.get(`auth/me`)
             .then(response => response.data)
+    },
+    setLoginAuth(formData: FormDataType) {
+        debugger
+        return instance.post<LoginRensponseType>(`auth/login`, formData)
+            .then(response => response.data)
     }
 }
+
+
 
 
 //Запрос default
