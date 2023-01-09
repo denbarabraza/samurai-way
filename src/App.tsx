@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import {Header} from "./components/Header/Header";
 import {BrowserRouter, Route} from "react-router-dom";
 import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
 import {NavbarContainer} from "./components/Navbar/NavbarContainer";
@@ -24,8 +23,6 @@ const App = () => {
                 <HeaderContainer/>
                 <NavbarContainer/>
                 <div className={"app-wrapper-content"}>
-
-                    {/*<ProfileContainer  />*/}
 
                     <Route
                         path={'/profile/:userID?'}

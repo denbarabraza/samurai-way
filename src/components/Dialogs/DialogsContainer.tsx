@@ -1,11 +1,10 @@
 import React from 'react';
-import {addMessageAC, DialogsPageType, updateNewMessageTextAC} from "../../redux/dialogsReducer";
+import {addMessageAC, DialogsPageType} from "../../redux/dialogsReducer";
 import {connect} from "react-redux";
 import {RootReducerType} from "../../redux/redux-store";
 import {compose, Dispatch} from "redux";
 import {Dialogs} from "./Dialogs";
 import {WidthAuthRedirect} from "../../hoc/widthAuthRedirect";
-import {UsersC} from "../Users/UsersContainer";
 
 export type CommonDialogsType =
     MapStateToProps
@@ -15,8 +14,7 @@ type MapStateToProps = {
     dialogsPage: DialogsPageType
 }
 type MapDispatchToProps = {
-    sendMessageHandler: () => void
-    onChangeMessageHandler: (valueMessage: string) => void
+    sendMessageHandler: (message:string) => void
 }
 
 const mapStateToProps = (state: RootReducerType):MapStateToProps => {
@@ -26,11 +24,8 @@ const mapStateToProps = (state: RootReducerType):MapStateToProps => {
 }
 const mapDispatchToProps = (dispatch: Dispatch):MapDispatchToProps => {
     return {
-        sendMessageHandler: () => {
-            dispatch(addMessageAC())
-        },
-        onChangeMessageHandler: (valueMessage: string) => {
-            dispatch(updateNewMessageTextAC(valueMessage))
+        sendMessageHandler: (message:string) => {
+            dispatch(addMessageAC(message))
         }
     }
 }

@@ -25,7 +25,6 @@ export type ProfileType = {
 
 export type ProfilePageType = {
     posts: Array<PostsType>
-    newPostText: string
     profile: ProfileType | null
     status: string
 }
@@ -40,7 +39,6 @@ let initialState: ProfilePageType = {
         {id: 1, message: 'Hi, how are you?', likesCount: 13},
         {id: 2, message: 'It\'s my first post', likesCount: 22}
     ],
-    newPostText: '',
     profile: null,
     status: ''
 }
@@ -50,19 +48,15 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Pr
         case 'ADD_POST': {
             let newPost: PostsType = {
                 id: new Date().getTime(),
-                message: state.newPostText,
+                message: action.payload.newPostTitle,
                 likesCount: 0
             }
             return {...state, posts: [newPost, ...state.posts], newPostText: ''}
-        }
-        case 'UPDATE_NEW_POST_TEXT': {
-            return {...state, newPostText: action.newPostText}
         }
         case 'SET_USER_PROFILE': {
             return {...state, profile: action.payload.userProfile}
         }
         case 'SET_USER_STATUS': {
-            debugger
             return {...state, status: action.payload.status}
         }
         default:
@@ -72,21 +66,17 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Pr
 
 export type ProfileActionsTypes =
     ReturnType<typeof addPostAC>
-    | ReturnType<typeof updateNewPostTextAC>
     | ReturnType<typeof setUserProfileAC>
     | ReturnType<typeof setUserStatusAC>
 
 
 //Action Creator
-export const addPostAC = () => {
+export const addPostAC = (newPostTitle:string) => {
     return {
-        type: 'ADD_POST'
-    } as const
-}
-export const updateNewPostTextAC = (newPostText: string) => {
-    return {
-        type: 'UPDATE_NEW_POST_TEXT',
-        newPostText: newPostText
+        type: 'ADD_POST',
+        payload:{
+            newPostTitle
+        }
     } as const
 }
 export const setUserProfileAC = (userProfile: ProfileType) => {
@@ -121,7 +111,6 @@ export const getUserStatus = (userID: number | string): AppThunk => {
         //вынесли запрос в API
         profileAPI.getStatus(userID)
             .then(data => {
-                debugger
                 dispatch(setUserStatusAC(data))
             })
     }

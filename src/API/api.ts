@@ -1,5 +1,5 @@
 import axios from "axios";
-import {FormDataType} from "../components/Login/Login";
+import {LoginFormDataType} from "../components/Login/Login";
 import {LoginRensponseType} from "../redux/authReducer";
 
 const instance = axios.create({
@@ -20,7 +20,6 @@ export const usersAPI = {
             .then(response => response.data)
     },
     getFollow(idUser: number) {
-        debugger
         return instance.post(`follow/${idUser}`)
             .then(response => response.data)
     }
@@ -46,20 +45,8 @@ export const authAPI = {
         return instance.get(`auth/me`)
             .then(response => response.data)
     },
-    setLoginAuth(formData: FormDataType) {
-        debugger
+    setLoginAuth(formData: LoginFormDataType) {
         return instance.post<LoginRensponseType>(`auth/login`, formData)
             .then(response => response.data)
     }
 }
-
-
-
-
-//Запрос default
-// axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userID,{
-//     withCredentials:true
-// })
-//     .then(response => {
-//         this.props.setUserProfile(response.data)
-//     })

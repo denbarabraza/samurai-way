@@ -13,7 +13,6 @@ export class ProfileStatus extends React.Component<CommonUsersType> {
     }
 
     componentDidUpdate(prevProps: Readonly<CommonUsersType>, prevState: Readonly<StateType>) {
-        debugger
         if (prevProps.status !== this.props.status) {
             this.setState({
                 newStatus: this.props.status

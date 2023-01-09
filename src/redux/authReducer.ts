@@ -1,6 +1,6 @@
 import {AppThunk} from "./redux-store";
 import {authAPI} from "../API/api";
-import {FormDataType} from "../components/Login/Login";
+import {LoginFormDataType} from "../components/Login/Login";
 
 
 export type LoginRensponseType = {
@@ -81,7 +81,7 @@ export const getMeAuthThunk = (): AppThunk => {
     }
 }
 
-export const setLoginAuthThunk = (formData:FormDataType): AppThunk => {
+export const setLoginAuthThunk = (formData:LoginFormDataType): AppThunk => {
     return (dispatch) => {
         debugger
         authAPI.setLoginAuth(formData)
