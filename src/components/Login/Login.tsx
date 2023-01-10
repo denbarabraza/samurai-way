@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {setLoginAuthThunk} from "../../redux/authReducer";
+import {setLoginAuthThunk, setLogOutThunk} from "../../redux/authReducer";
 import {Input} from "../common/FormsControls/FormsControls";
 import {required} from "../../utils/validators/validators";
+import {connect} from "react-redux";
+import {AppDispatch, RootReducerType} from "../../redux/redux-store";
+import {Redirect} from "react-router-dom";
+import s from "../common/FormsControls/FormsControls.module.css";
 
 export type LoginFormDataType = {
-    login: string
+    email: string
     password: string
     rememberMe: boolean
 }
@@ -15,8 +19,8 @@ export const LoginForm: React.FC<InjectedFormProps<LoginFormDataType>> = (props)
         <form onSubmit={props.handleSubmit}>
             <div>
                 <Field
-                    name={'login'}
-                    placeholder={'Login'}
+                    name={'email'}
+                    placeholder={'Email'}
                     component={Input}
                     validate={[required]}
                 />
@@ -26,17 +30,20 @@ export const LoginForm: React.FC<InjectedFormProps<LoginFormDataType>> = (props)
                 <Field
                     name={'password'}
                     placeholder={'Password'}
+                    type={'password'}
                     component={Input}
                     validate={[required]}/>
             </div>
+            {props.error && <div className={s.textError}>
+                {props.error}
+            </div>}
             <div>
                 <Field
                     type={'checkbox'}
                     name={'rememberMe'}
                     component={Input}
-                    validate={[required]}
                 />
-                <span>Remember me</span>
+                <span>remember me</span>
             </div>
             <div>
                 <button>Log In</button>
@@ -47,10 +54,15 @@ export const LoginForm: React.FC<InjectedFormProps<LoginFormDataType>> = (props)
 
 const LoginFormRedux = reduxForm<LoginFormDataType>({form: 'login'})(LoginForm)
 
-export const Login = () => {
+export const Login: FC<CommonLoginType> = (props) => {
 
     const onSubmitLogin = (formData: LoginFormDataType) => {
-        setLoginAuthThunk(formData)
+        console.log(formData)
+        props.setLoginAuth(formData)
+    }
+
+    if (props.auth) {
+        return <Redirect to={'/profile'}/>
     }
 
     return (
@@ -60,3 +72,29 @@ export const Login = () => {
         </div>
     );
 };
+
+type CommonLoginType = MapStateToProps & MapDispatchToProps
+
+const mapStateToProps = (state: RootReducerType): MapStateToProps => {
+    return {
+        auth: state.auth.isAuth
+    }
+}
+
+type MapStateToProps = {
+    auth: boolean
+}
+
+type MapDispatchToProps = {
+    setLoginAuth: (formData: LoginFormDataType) => void
+    setLogOut: () => void
+}
+
+const mapDispatchToProps = (dispatch: AppDispatch): MapDispatchToProps => ({
+    setLoginAuth: (formData: LoginFormDataType) => {
+        dispatch(setLoginAuthThunk(formData))
+    },
+    setLogOut: () => setLogOutThunk()
+})
+
+export const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login)

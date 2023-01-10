@@ -20,17 +20,20 @@ export type CommonUsersType =
 type MapStateToPropsType = {
     profilePage: ProfileType | null
     status: string
+    authUserID: number | null
+    isAuth: boolean
 }
 type MapDispatchToPropsType = {
-    getProfileThunk: (userID: number | string) => void
-    getUserStatus: (userID: number | string) => void
+    getProfileThunk: (userID: number | string ) => void
+    getUserStatus: (userID: number | string ) => void
     updateUserStatus: (status: string) => void
 }
 
 class ProfileContainer extends React.Component<OnUserType> {
     componentDidMount() {
-        let userID: number | string = this.props.match.params.userID;
+        let userID: number | string  = this.props.match.params.userID;
         if (!userID) {
+            //userID = this.props.authUserID;
             userID = 2;
         }
         this.props.getProfileThunk(userID);
@@ -47,7 +50,9 @@ class ProfileContainer extends React.Component<OnUserType> {
 const mapStateToProps = (state: RootReducerType): MapStateToPropsType => {
     return {
         profilePage: state.profilePage.profile,
-        status:state.profilePage.status
+        status:state.profilePage.status,
+        authUserID: state.auth.userId,
+        isAuth:state.auth.isAuth
     }
 }
 const mapDispatchToProps = {

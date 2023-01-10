@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {Header} from "./Header";
 import {RootReducerType} from "../../redux/redux-store";
-import {AuthType, getMeAuthThunk} from "../../redux/authReducer";
+import {AuthType, getMeAuthThunk, setLogOutThunk} from "../../redux/authReducer";
 
 
 class HeaderContainer extends React.Component<CommonAuthUserType> {
@@ -23,6 +23,7 @@ type MapStateToProps = {
 }
 type MapDispatchToProps = {
     getMeAuthThunk: () => void
+    setLogOutThunk: () => void
 }
 
 const mapStateToProps = (state: RootReducerType): MapStateToProps => {
@@ -32,7 +33,8 @@ const mapStateToProps = (state: RootReducerType): MapStateToProps => {
 }
 
 const mapDispatchToProps = {
-    getMeAuthThunk: getMeAuthThunk
+    getMeAuthThunk: getMeAuthThunk,
+    setLogOutThunk: setLogOutThunk
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)

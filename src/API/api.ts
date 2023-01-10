@@ -1,6 +1,6 @@
 import axios from "axios";
 import {LoginFormDataType} from "../components/Login/Login";
-import {LoginRensponseType} from "../redux/authReducer";
+import {LoginResponseType} from "../redux/authReducer";
 
 const instance = axios.create({
     withCredentials: true,
@@ -46,7 +46,11 @@ export const authAPI = {
             .then(response => response.data)
     },
     setLoginAuth(formData: LoginFormDataType) {
-        return instance.post<LoginRensponseType>(`auth/login`, formData)
+        return instance.post<LoginResponseType>(`auth/login`, formData)
+            .then(response => response.data)
+    },
+    setLogOut() {
+        return instance.delete<LoginResponseType>(`auth/login`)
             .then(response => response.data)
     }
 }
